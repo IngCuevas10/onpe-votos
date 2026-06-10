@@ -94,12 +94,13 @@ async function actualizar() {
         document.getElementById("hora").innerHTML =
             "Actualizado: " + new Date().toLocaleTimeString();
 
-    } catch(error){
+    catch(error){
 
-        document.getElementById("hora").innerHTML =
-            "Error conectando con ONPE";
+    document.getElementById("hora").innerHTML =
+        "Error: " + error;
 
-        console.log(error);
+    console.error(error);
+}
     }
 }
 
