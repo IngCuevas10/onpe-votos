@@ -47,19 +47,67 @@ body{
 <h1>Diferencia de votos ONPE</h1>
 
 <p>Sánchez</p>
-<div class="valor">Cargando...</div>
+<div id="sanchez" class="valor">Cargando...</div>
 
 <p>Keiko</p>
-<div class="valor">Cargando...</div>
+<div id="keiko" class="valor">Cargando...</div>
 
 <p>Diferencia</p>
-<div class="diferencia">Cargando...</div>
+<div id="diferencia" class="diferencia">Cargando...</div>
 
-<div class="actualizacion">
-Página lista para conectar con ONPE
+<div id="hora" class="actualizacion">
+Actualizando...
 </div>
 
 </div>
+
+<script>
+
+async function actualizar() {
+
+    try {
+
+        const respuesta = await fetch(
+        "https://resultadosegundavuelta.onpe.gob.pe/presentacion-backend/resumen-general/participantes?idEleccion=10&tipoFiltro=eleccion"
+        );
+
+        const datos = await respuesta.json();
+
+        const keiko = datos.data[0];
+        const sanchez = datos.data[1];
+
+        document.getElementById("keiko").innerHTML =
+            Number(keiko.totalVotosValidos).toLocaleString();
+
+        document.getElementById("sanchez").innerHTML =
+            Number(sanchez.totalVotosValidos).toLocaleString();
+
+        const diferencia =
+            Math.abs(
+                Number(keiko.totalVotosValidos) -
+                Number(sanchez.totalVotosValidos)
+            );
+
+        document.getElementById("diferencia").innerHTML =
+            diferencia.toLocaleString();
+
+        document.getElementById("hora").innerHTML =
+            "Actualizado: " + new Date().toLocaleTimeString();
+
+    } catch(error){
+
+        document.getElementById("hora").innerHTML =
+            "Error conectando con ONPE";
+
+        console.log(error);
+    }
+}
+
+actualizar();
+
+setInterval(actualizar, 60000);
+
+</script>
 
 </body>
 </html>
